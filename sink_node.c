@@ -21,6 +21,16 @@ received_announcement(struct announcement *a,
   // It's the sink node, no need to maintain the neighbor table
 }
 static struct announcement example_announcement;
+
+
+#define ANNOUNCEMENT_INTERVAL 10 * CLOCK_SECOND
+static struct ctimer announcement_timer;
+static void handle_announcement_timer(void* ptr)
+{
+  announcement_bump(&example_announcement);
+  ctimer_reset(&announcement_timer);
+}
+
 /*---------------------------------------------------------------------------*/
 /*
  * This function is called at the final recepient of the message.
@@ -80,6 +90,8 @@ PROCESS_THREAD(example_multihop_process, ev, data)
 
   /* Set a dummy value to start sending out announcments. */
   announcement_set_value(&example_announcement, 0);
+
+  ctimer_set(&announcement_timer, ANNOUNCEMENT_INTERVAL, handle_announcement_timer, NULL);
 
   /* Loop forever, send a packet when the button is pressed. */
   while(1) {

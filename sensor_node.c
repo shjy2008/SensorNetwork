@@ -4,11 +4,7 @@
 #include "lib/memb.h"
 #include "lib/random.h"
 #include "dev/button-sensor.h"
-//#include "platform/sky/dev/temperature-sensor.h"
-//#include "platform/sky/dev/light-sensor.h"
-//#include "lib/sensors.h"
 #include "dev/light-sensor.h"
-//#include "dev/temperature-sensor.h"
 #include "dev/sht11/sht11-sensor.h"
 
 
@@ -32,10 +28,53 @@ MEMB(neighbor_mem, struct example_neighbor, MAX_NEIGHBORS);
 uint16_t my_hop_count_to_sink = MAX_HOP_COUNT;
 static struct announcement example_announcement;
 
+#define ANNOUNCEMENT_INTERVAL 10 * CLOCK_SECOND
+static struct ctimer announcement_timer;
+static void handle_announcement_timer(void* ptr)
+{
+  announcement_bump(&example_announcement);
+  ctimer_reset(&announcement_timer);
+}
+
 /*---------------------------------------------------------------------------*/
 PROCESS(example_multihop_process, "multihop example");
 AUTOSTART_PROCESSES(&example_multihop_process);
 /*---------------------------------------------------------------------------*/
+
+static int addr_to_node_id(linkaddr_t addr)
+{
+  return addr.u8[0] + addr.u8[1] * 256;
+}
+
+static void update_my_hop_count_to_sink()
+{
+  int is_hop_count_updated = 0;
+  uint16_t my_previous_hop_count = my_hop_count_to_sink;
+
+  int min_neighbor_hop = MAX_HOP_COUNT;
+  struct example_neighbor *e;
+  //printf("Neighbor hop counts: ");
+  for (e = list_head(neighbor_table); e != NULL; e = list_item_next(e)) {
+    //printf("nodeId %d hop %u / ", addr_to_node_id(e->addr), e->hop_count_to_sink);
+    if (e->hop_count_to_sink < min_neighbor_hop) {
+      min_neighbor_hop = e->hop_count_to_sink;
+    }
+  }
+  //printf("\n");
+
+  if (min_neighbor_hop != MAX_HOP_COUNT && my_hop_count_to_sink != min_neighbor_hop + 1) {
+      my_hop_count_to_sink = min_neighbor_hop + 1;
+      is_hop_count_updated = 1;
+  }
+  
+  if (is_hop_count_updated) {
+      announcement_set_value(&example_announcement, my_hop_count_to_sink);
+      printf("Update my hop count from %u to %u\n", my_previous_hop_count, my_hop_count_to_sink);
+
+      announcement_bump(&example_announcement);
+  }
+}
+
 /*
  * This function is called by the ctimer present in each neighbor
  * table entry. The function removes the neighbor from the table
@@ -48,6 +87,11 @@ remove_neighbor(void *n)
 
   list_remove(neighbor_table, e);
   memb_free(&neighbor_mem, e);
+
+  // After removing a neighbor, update my hop count and announce it to my rest neighbors
+  update_my_hop_count_to_sink();
+  
+
 }
 /*---------------------------------------------------------------------------*/
 /*
@@ -64,17 +108,8 @@ received_announcement(struct announcement *a,
 {
   struct example_neighbor *e;
 
-    printf("Got announcement from %d.%d, id %u, value %u\n",
-      from->u8[0], from->u8[1], id, value);
-    
-    // Update my_hop_count_to_sink if this neighbor is closer to the sink
-    if (value < my_hop_count_to_sink - 1) {
-      uint16_t previous_my_hop_count_to_sink = my_hop_count_to_sink;
-      my_hop_count_to_sink = value + 1;
-      announcement_set_value(&example_announcement, my_hop_count_to_sink);
-      printf("Update my hop count from %u to %u\n", previous_my_hop_count_to_sink, my_hop_count_to_sink);
-      announcement_bump(&example_announcement);
-    }
+    //printf("Got announcement from nodeId %d, id %u, value %u\n",
+    //  addr_to_node_id(*from), id, value);
 
     for (e = list_head(neighbor_table); e != NULL; e = list_item_next(e)) {
       if (linkaddr_cmp(from, &e->addr)) {
@@ -90,6 +125,8 @@ received_announcement(struct announcement *a,
       ctimer_set(&e->ctimer, NEIGHBOR_TIMEOUT, remove_neighbor, e);
       e->hop_count_to_sink = value;
     }
+
+    update_my_hop_count_to_sink();
 }
 /*---------------------------------------------------------------------------*/
 /*
@@ -122,28 +159,28 @@ forward(struct multihop_conn *c,
   if (num > 0) {
     struct example_neighbor* pointer = list_head(neighbor_table);
     for (i = 0; i < num; ++i) {
-      //printf("Check index %d neighbor %d.%d, its hop count is %u, compare to min_hop_count %u\n", 
-      //          i, pointer->addr.u8[0], pointer->addr.u8[1], pointer->hop_count_to_sink, min_hop_count);
+      //printf("Check index %d neighbor nodeId %d, its hop count is %u, compare to min_hop_count %u\n", 
+      //         i, addr_to_node_id(pointer->addr), pointer->hop_count_to_sink, min_hop_count);
       if (pointer->hop_count_to_sink < min_hop_count) {
         n = pointer;
         min_hop_count = pointer->hop_count_to_sink;
-      //  printf("this one has a smaller hop count %u compared to min_hop_count %u\n", pointer->hop_count_to_sink, min_hop_count);
+        //printf("this one has a smaller hop count %u compared to min_hop_count %u\n", pointer->hop_count_to_sink, min_hop_count);
       }
       pointer = list_item_next(pointer);
     }
 
     if (n != NULL) {
-      printf("%d.%d: Forwarding packet to %d.%d (%d in list), hops %d\n", 
-        linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
-        n->addr.u8[0], n->addr.u8[1], num,
+      printf("My nodeId %d: Forwarding packet to nodeId %d (%d in list), hops %d\n", 
+        addr_to_node_id(linkaddr_node_addr),
+        addr_to_node_id(n->addr), num,
         packetbuf_attr(PACKETBUF_ATTR_HOPS));
       
       return &n->addr;
     }
   }
   
-  printf("%d.%d: did not find a neighbor to forward to. Neighbor count: %d\n", 
-    linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1], num);
+  printf("My nodeId %d: did not find a neighbor to forward to. Neighbor count: %d\n", 
+    addr_to_node_id(linkaddr_node_addr), num);
   return NULL;
 }
 static const struct multihop_callbacks multihop_call = {recv, forward};
@@ -179,6 +216,8 @@ PROCESS_THREAD(example_multihop_process, ev, data)
   SENSORS_ACTIVATE(light_sensor);
   SENSORS_ACTIVATE(sht11_sensor);
 
+  ctimer_set(&announcement_timer, ANNOUNCEMENT_INTERVAL, handle_announcement_timer, NULL);
+  
   /* Loop forever, send a packet when the button is pressed. */
   while(1) {
     linkaddr_t to;
@@ -191,7 +230,7 @@ PROCESS_THREAD(example_multihop_process, ev, data)
     int temperature = ((sht11_sensor.value(SHT11_SENSOR_TEMP) / 10) - 396) / 10;
 
     /* Copy the data string to the packet buffer. */
-    int node_id = linkaddr_node_addr.u8[0] + linkaddr_node_addr.u8[1] * 256;
+    int node_id = addr_to_node_id(linkaddr_node_addr);
     char buffer[100];
     sprintf(buffer, "%d,%d,%d", node_id, light, temperature);
     packetbuf_copyfrom(buffer, strlen(buffer) + 1);
