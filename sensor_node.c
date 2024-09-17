@@ -43,7 +43,7 @@ static void handle_announcement_timer(void* ptr)
 }
 
 // Send data to the sink node every minute
-#define SEND_DATA_INTERVAL 30 * CLOCK_SECOND
+#define SEND_DATA_INTERVAL 60 * CLOCK_SECOND
 static int light = 0;
 static int temperature = 0;
 static struct ctimer send_data_timer;
@@ -262,7 +262,10 @@ static void send_data_to_sink()
 
 static void handle_send_data_timer(void* ptr)
 {
-  send_data_to_sink();
+  int random_delay_time = random_rand() % 10 * CLOCK_SECOND;
+  static struct ctimer delay_send_timer;
+  ctimer_set(&delay_send_timer, random_delay_time, send_data_to_sink, NULL);
+
   ctimer_reset(&send_data_timer);
 }
 
@@ -305,16 +308,10 @@ PROCESS_THREAD(example_multihop_process, ev, data)
   while(1) {
 
     // /* Wait until we get a sensor event with the button sensor as data. */
-    // PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
-		// 	     data == &button_sensor);
+    PROCESS_WAIT_EVENT_UNTIL(ev == sensors_event &&
+			     data == &button_sensor);
 
-    // PROCESS_WAIT_UNTIL(etimer_expired(&send_data_timer));
-    PROCESS_WAIT_EVENT_UNTIL((ev == sensors_event && data == &button_sensor));
-
-    //if (etimer_expired(&send_data_timer)) 
-    //{
-      send_data_to_sink();
-    //}
+    send_data_to_sink();
   }
 
   PROCESS_END();
