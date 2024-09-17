@@ -46,14 +46,22 @@ recv(struct multihop_conn *c, const linkaddr_t *sender,
   // nodeID                 light                   temperature 
   // 127                    180                     25
   char* recv_data = (char *)packetbuf_dataptr();
-  printf("%-10s %-10s %-10s\n", "nodeID", "light", "temperature");
+  
+  char data_list[20][3];
   char* token = strtok(recv_data, ",");
+  int i = 0;
   while (token != NULL) {
-    printf("%-10s ", token);
+    sprintf(data_list[i], token);
     token = strtok(NULL, ",");
+    ++i;
   }
-  printf("\n");
 
+  if (i == 2) {
+    printf("%-10s %-10s\n%-10s %-10s\n", "nodeID", "light", data_list[0], data_list[1]);
+  }
+  else if (i == 3) {
+    printf("%-10s %-10s %-10s\n%-10s %-10s %-10s\n", "nodeID", "light", "temperature", data_list[0], data_list[1], data_list[2]);
+  }
 }
 
 /*

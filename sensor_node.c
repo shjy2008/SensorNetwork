@@ -44,8 +44,6 @@ static void handle_announcement_timer(void* ptr)
 
 // Send data to the sink node every minute
 #define SEND_DATA_INTERVAL 60 * CLOCK_SECOND
-static int light = 0;
-static int temperature = 0;
 static struct ctimer send_data_timer;
 static int temperature_measure_counter = 0;
 
@@ -227,24 +225,29 @@ forward(struct multihop_conn *c,
 static const struct multihop_callbacks multihop_call = {recv, forward};
 static struct multihop_conn multihop;
 
-// Send packet data to the sink node, this function should be run every a minute
+// Send packet data to the sink node, this function is called every minute(The first call is at 1 minute)
 static void send_data_to_sink()
 {
+  int node_id = addr_to_node_id(linkaddr_node_addr);
+  char buffer[100];
+
   // Measure light every minite (SEND_DATA_INTERVAL)
-  light = light_sensor.value(0);
+  int light = light_sensor.value(0);
 
   // Measure temperature every 5 minutes (SEND_DATA_INTERVAL * 5)
+  // At the 1, 6, 11, ... minute since the programme starts, measure temperature
   --temperature_measure_counter;
   if (temperature_measure_counter <= 0) {
-    temperature = ((sht11_sensor.value(SHT11_SENSOR_TEMP) / 10) - 396) / 10;
-    temperature_measure_counter = 5;
-    printf("measure temperature this time!!!\n");
+    int temperature = ((sht11_sensor.value(SHT11_SENSOR_TEMP) / 10) - 396) / 10;
+    temperature_measure_counter = 5; 
+
+    sprintf(buffer, "%d,%d,%d", node_id, light, temperature);
+  }
+  else {
+    sprintf(buffer, "%d,%d", node_id, light);
   }
 
   /* Copy the data string to the packet buffer. */
-  int node_id = addr_to_node_id(linkaddr_node_addr);
-  char buffer[100];
-  sprintf(buffer, "%d,%d,%d", node_id, light, temperature);
   packetbuf_copyfrom(buffer, strlen(buffer) + 1);
 
   /* Set the Rime address of the final receiver of the packet to
@@ -256,7 +259,7 @@ static void send_data_to_sink()
   to.u8[1] = 0;
 
   /* Send the packet. */
-  printf("Send packet from %d to %d...\n", node_id, addr_to_node_id(to));
+  printf("Send packet \"%s\" from %d to %d...\n", buffer, node_id, addr_to_node_id(to));
   multihop_send(&multihop, &to);
 }
 
