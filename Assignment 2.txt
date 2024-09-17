@@ -1,0 +1,20 @@
+Assignment 2
+Application Scenario: 
+Assuming a TelosB sensor device has been deployed in each room in the Owheo building to monitor light and temperature. It is required that each sensor should measure lightness every minute and temperature every 5 minutes. The measurements must be sent to a sink node that can log the received data into a database. The nodeid for the sink node is set to 1, and the nodeid for any other sensor device is set to the number of the room where the sensor is deployed. Since each sensor device has a limited transmission range, a sensor device needs to transmit its measurements in a multi-hop manner to the sink node if the sink node is not in its transmission range. 
+What you need to do:
+Develop programs that run on the sensor devices to perform the following tasks:
+(1) sense the lightness every minute and temperature every 5 minutes.
+(2) perform multi-hop routing. Unlike what you will do in Lab 6, shortest path routing based on hop-count should be implemented. 
+(3) The sink node should output the received data in the following format in the mote output window in Cooja. There is no need to log the measurements into a database. 
+    nodeID                 light                   temperature 
+      127                       180                       25
+
+Contiki is open-source. There are many examples provided in the distribution package for you to learn how to develop programs. Dig into these examples to learn how to read lightness and temperature data and how to implement the multi-hop routing protocol. 
+
+What to submit:
+You should submit the code you developed and a README file explaining how to run your program.  The assignment is due at 4pm on October 2 (Wednesday).  
+
+Marking Rubric:
+Correctness [8 marks]: The programs always work correctly and meet the specifications. The program running at the sensor nodes should  (1) measure lightness and temperature every minute for 5 minutes,  (2) send the measurements to the sink, and (3) forward packets based on the shortest path routing using hop-count. The program running at the sink should output the received data in the given format. 
+Robustness [1 mark]: Both programs compile and run without errors and warnings in Cooja. 
+Readability: [1 mark]: Code is clean, understandable, and well-commented.  
