@@ -20,10 +20,12 @@ received_announcement(struct announcement *a,
 {
   // It's the sink node, no need to maintain the neighbor table
 }
+
+// Announcement
 static struct announcement example_announcement;
 
-
-#define ANNOUNCEMENT_INTERVAL 10 * CLOCK_SECOND
+// Send announcements periodically
+#define ANNOUNCEMENT_INTERVAL 30 * CLOCK_SECOND
 static struct ctimer announcement_timer;
 static void handle_announcement_timer(void* ptr)
 {
@@ -42,7 +44,7 @@ recv(struct multihop_conn *c, const linkaddr_t *sender,
 {
   // Output the received data in a format like:
   // nodeID                 light                   temperature 
-  // 127                       180                       25
+  // 127                    180                     25
   char* recv_data = (char *)packetbuf_dataptr();
   printf("%-10s %-10s %-10s\n", "nodeID", "light", "temperature");
   char* token = strtok(recv_data, ",");
@@ -72,6 +74,7 @@ forward(struct multihop_conn *c,
 
 static const struct multihop_callbacks multihop_call = {recv, forward};
 static struct multihop_conn multihop;
+
 /*---------------------------------------------------------------------------*/
 PROCESS_THREAD(example_multihop_process, ev, data)
 {
@@ -91,6 +94,7 @@ PROCESS_THREAD(example_multihop_process, ev, data)
   /* Set a dummy value to start sending out announcments. */
   announcement_set_value(&example_announcement, 0);
 
+  // Announce to neighbors periodically
   ctimer_set(&announcement_timer, ANNOUNCEMENT_INTERVAL, handle_announcement_timer, NULL);
 
   /* Loop forever, send a packet when the button is pressed. */
