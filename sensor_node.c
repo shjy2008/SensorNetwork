@@ -265,6 +265,7 @@ static void send_data_to_sink()
 
 static void handle_send_data_timer(void* ptr)
 {
+  // Randomly delay 0-10 seconds to avoid packet collisions
   int random_delay_time = random_rand() % 10 * CLOCK_SECOND;
   static struct ctimer delay_send_timer;
   ctimer_set(&delay_send_timer, random_delay_time, send_data_to_sink, NULL);
