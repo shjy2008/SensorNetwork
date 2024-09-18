@@ -47,7 +47,7 @@ recv(struct multihop_conn *c, const linkaddr_t *sender,
   // 127                    180                     25
   char* recv_data = (char *)packetbuf_dataptr();
   
-  char data_list[20][3];
+  char data_list[3][20];
   char* token = strtok(recv_data, ",");
   int i = 0;
   while (token != NULL) {
