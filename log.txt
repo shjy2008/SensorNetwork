@@ -1,0 +1,130 @@
+00:00.334	ID:8	Rime started with address 8.0
+00:00.343	ID:8	MAC 08:00:00:00:00:00:00:00 Contiki-3.x-3345-g32b5b17f6 started. Node id is set to 8.
+00:00.352	ID:8	nullsec CSMA ContikiMAC, channel check rate 8 Hz, radio channel 26
+00:00.354	ID:8	Starting 'multihop example'
+00:00.497	ID:2	Rime started with address 2.0
+00:00.506	ID:2	MAC 02:00:00:00:00:00:00:00 Contiki-3.x-3345-g32b5b17f6 started. Node id is set to 2.
+00:00.511	ID:6	Rime started with address 6.0
+00:00.515	ID:2	nullsec CSMA ContikiMAC, channel check rate 8 Hz, radio channel 26
+00:00.517	ID:2	Starting 'multihop example'
+00:00.521	ID:6	MAC 06:00:00:00:00:00:00:00 Contiki-3.x-3345-g32b5b17f6 started. Node id is set to 6.
+00:00.530	ID:6	nullsec CSMA ContikiMAC, channel check rate 8 Hz, radio channel 26
+00:00.532	ID:6	Starting 'multihop example'
+00:00.609	ID:4	Rime started with address 4.0
+00:00.619	ID:4	MAC 04:00:00:00:00:00:00:00 Contiki-3.x-3345-g32b5b17f6 started. Node id is set to 4.
+00:00.628	ID:4	nullsec CSMA ContikiMAC, channel check rate 8 Hz, radio channel 26
+00:00.630	ID:4	Starting 'multihop example'
+00:00.641	ID:1	Rime started with address 1.0
+00:00.650	ID:1	MAC 01:00:00:00:00:00:00:00 Contiki-3.x-3345-g32b5b17f6 started. Node id is set to 1.
+00:00.659	ID:1	nullsec CSMA ContikiMAC, channel check rate 8 Hz, radio channel 26
+00:00.661	ID:1	Starting 'multihop example'
+00:00.663	ID:7	Rime started with address 7.0
+00:00.672	ID:7	MAC 07:00:00:00:00:00:00:00 Contiki-3.x-3345-g32b5b17f6 started. Node id is set to 7.
+00:00.681	ID:7	nullsec CSMA ContikiMAC, channel check rate 8 Hz, radio channel 26
+00:00.683	ID:7	Starting 'multihop example'
+00:00.969	ID:9	Rime started with address 9.0
+00:00.976	ID:5	Rime started with address 5.0
+00:00.979	ID:9	MAC 09:00:00:00:00:00:00:00 Contiki-3.x-3345-g32b5b17f6 started. Node id is set to 9.
+00:00.985	ID:5	MAC 05:00:00:00:00:00:00:00 Contiki-3.x-3345-g32b5b17f6 started. Node id is set to 5.
+00:00.988	ID:9	nullsec CSMA ContikiMAC, channel check rate 8 Hz, radio channel 26
+00:00.990	ID:9	Starting 'multihop example'
+00:00.994	ID:5	nullsec CSMA ContikiMAC, channel check rate 8 Hz, radio channel 26
+00:00.996	ID:5	Starting 'multihop example'
+00:01.160	ID:3	Rime started with address 3.0
+00:01.170	ID:3	MAC 03:00:00:00:00:00:00:00 Contiki-3.x-3345-g32b5b17f6 started. Node id is set to 3.
+00:01.179	ID:3	nullsec CSMA ContikiMAC, channel check rate 8 Hz, radio channel 26
+00:01.181	ID:3	Starting 'multihop example'
+00:02.004	ID:4	Update my hop count from 9999 to 1
+00:02.031	ID:6	Update my hop count from 9999 to 1
+00:02.391	ID:2	Update my hop count from 9999 to 2
+00:03.979	ID:8	Update my hop count from 9999 to 2
+00:05.059	ID:7	Update my hop count from 9999 to 3
+00:05.113	ID:9	Update my hop count from 9999 to 3
+00:07.430	ID:3	Update my hop count from 9999 to 4
+01:01.662	ID:4	Send packet "4,54,24" from 4 to 1...
+01:01.667	ID:4	My nodeId 4: Forwarding packet to nodeId 1 (2 in list), hops 1
+01:01.716	ID:7	Send packet "7,40,24" from 7 to 1...
+01:01.720	ID:7	My nodeId 7: Forwarding packet to nodeId 8 (3 in list), hops 1
+01:01.784	ID:1	nodeID     light      temperature
+01:01.786	ID:1	4          54         24        
+01:01.980	ID:8	My nodeId 8: Forwarding packet to nodeId 6 (4 in list), hops 2
+01:02.029	ID:5	Send packet "5,54,24" from 5 to 1...
+01:02.034	ID:5	My nodeId 5: Forwarding packet to nodeId 8 (2 in list), hops 1
+01:02.158	ID:6	My nodeId 6: Forwarding packet to nodeId 1 (2 in list), hops 3
+01:02.282	ID:1	nodeID     light      temperature
+01:02.284	ID:1	7          40         24        
+01:02.478	ID:8	My nodeId 8: Forwarding packet to nodeId 6 (4 in list), hops 2
+01:02.531	ID:6	My nodeId 6: Forwarding packet to nodeId 1 (2 in list), hops 3
+01:02.660	ID:1	nodeID     light      temperature
+01:02.662	ID:1	5          54         24        
+01:05.023	ID:9	Send packet "9,140,24" from 9 to 1...
+01:05.027	ID:9	My nodeId 9: Forwarding packet to nodeId 2 (2 in list), hops 1
+01:05.142	ID:2	My nodeId 2: Forwarding packet to nodeId 4 (4 in list), hops 2
+01:05.254	ID:4	My nodeId 4: Forwarding packet to nodeId 1 (2 in list), hops 3
+01:05.285	ID:1	nodeID     light      temperature
+01:05.288	ID:1	9          14024      24        
+01:05.565	ID:6	Send packet "6,102,24" from 6 to 1...
+01:05.569	ID:6	My nodeId 6: Forwarding packet to nodeId 1 (2 in list), hops 1
+01:05.660	ID:1	nodeID     light      temperature
+01:05.662	ID:1	6          10224      24        
+01:06.387	ID:8	Send packet "8,50,24" from 8 to 1...
+01:06.391	ID:8	My nodeId 8: Forwarding packet to nodeId 6 (4 in list), hops 1
+01:06.532	ID:6	My nodeId 6: Forwarding packet to nodeId 1 (2 in list), hops 2
+01:06.659	ID:1	nodeID     light      temperature
+01:06.661	ID:1	8          50         24        
+01:07.213	ID:3	Send packet "3,64,24" from 3 to 1...
+01:07.218	ID:3	My nodeId 3: Forwarding packet to nodeId 9 (1 in list), hops 1
+01:07.239	ID:9	My nodeId 9: Forwarding packet to nodeId 2 (2 in list), hops 2
+01:07.268	ID:2	My nodeId 2: Forwarding packet to nodeId 4 (4 in list), hops 3
+01:07.379	ID:4	My nodeId 4: Forwarding packet to nodeId 1 (2 in list), hops 4
+01:07.408	ID:1	nodeID     light      temperature
+01:07.411	ID:1	3          64         24        
+01:07.550	ID:2	Send packet "2,254,24" from 2 to 1...
+01:07.555	ID:2	My nodeId 2: Forwarding packet to nodeId 4 (4 in list), hops 1
+01:07.754	ID:4	My nodeId 4: Forwarding packet to nodeId 1 (2 in list), hops 2
+01:07.783	ID:1	nodeID     light      temperature
+01:07.786	ID:1	2          25424      24        
+02:01.007	ID:5	Send packet "5,6" from 5 to 1...
+02:01.012	ID:5	My nodeId 5: Forwarding packet to nodeId 8 (2 in list), hops 1
+02:01.104	ID:8	My nodeId 8: Forwarding packet to nodeId 6 (4 in list), hops 2
+02:01.157	ID:6	My nodeId 6: Forwarding packet to nodeId 1 (2 in list), hops 3
+02:01.191	ID:3	Send packet "3,48" from 3 to 1...
+02:01.196	ID:3	My nodeId 3: Forwarding packet to nodeId 9 (1 in list), hops 1
+02:01.283	ID:1	nodeID     light     
+02:01.284	ID:1	5          6         
+02:01.614	ID:9	My nodeId 9: Forwarding packet to nodeId 2 (2 in list), hops 2
+02:01.639	ID:4	Send packet "4,188" from 4 to 1...
+02:01.642	ID:2	My nodeId 2: Forwarding packet to nodeId 4 (4 in list), hops 3
+02:01.643	ID:4	My nodeId 4: Forwarding packet to nodeId 1 (2 in list), hops 1
+02:01.755	ID:4	My nodeId 4: Forwarding packet to nodeId 1 (2 in list), hops 4
+02:01.909	ID:1	nodeID     light     
+02:01.910	ID:1	4          188       
+02:02.033	ID:1	nodeID     light     
+02:02.034	ID:1	3          48        
+02:06.363	ID:8	Send packet "8,170" from 8 to 1...
+02:06.368	ID:8	My nodeId 8: Forwarding packet to nodeId 6 (4 in list), hops 1
+02:06.406	ID:6	My nodeId 6: Forwarding packet to nodeId 1 (2 in list), hops 2
+02:06.526	ID:2	Send packet "2,170" from 2 to 1...
+02:06.531	ID:2	My nodeId 2: Forwarding packet to nodeId 4 (4 in list), hops 1
+02:06.534	ID:1	nodeID     light     
+02:06.536	ID:1	8          170       
+02:06.629	ID:4	My nodeId 4: Forwarding packet to nodeId 1 (2 in list), hops 2
+02:06.659	ID:1	nodeID     light     
+02:06.661	ID:1	2          170       
+02:07.999	ID:9	Send packet "9,160" from 9 to 1...
+02:08.003	ID:9	My nodeId 9: Forwarding packet to nodeId 2 (2 in list), hops 1
+02:08.141	ID:2	My nodeId 2: Forwarding packet to nodeId 4 (4 in list), hops 2
+02:08.255	ID:4	My nodeId 4: Forwarding packet to nodeId 1 (2 in list), hops 3
+02:08.283	ID:1	nodeID     light     
+02:08.285	ID:1	9          160       
+02:08.541	ID:6	Send packet "6,94" from 6 to 1...
+02:08.545	ID:6	My nodeId 6: Forwarding packet to nodeId 1 (2 in list), hops 1
+02:08.659	ID:1	nodeID     light     
+02:08.660	ID:1	6          94        
+02:09.692	ID:7	Send packet "7,42" from 7 to 1...
+02:09.697	ID:7	My nodeId 7: Forwarding packet to nodeId 8 (3 in list), hops 1
+02:09.980	ID:8	My nodeId 8: Forwarding packet to nodeId 6 (4 in list), hops 2
+02:10.032	ID:6	My nodeId 6: Forwarding packet to nodeId 1 (2 in list), hops 3
+02:10.157	ID:1	nodeID     light     
+02:10.159	ID:1	7          42        
+
